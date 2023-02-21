@@ -1,0 +1,90 @@
+#include <stdio.h>
+#include <ctype.h>
+#include <string.h>
+#define MAX_LENGTH 100
+#define KEYWORD 1
+#define IDENTIFIER 2
+#define OPERATOR 3
+#define LITERAL 4
+char keywords[][] = {"int", "float", "char", "if", "else", "while","for","auto","break","case","const","continue","default","do","double","enum","extern","for","goto",
+"long","register","return","short","signed","sizeof","static","struct","switch","typedef","union","unsigned","void","volatile"};
+char operators[][] = {"+", "-", "*", "/", "=", "==", "<", ">", "<=", ">="};
+int is_keyword(char *str) {
+    int i;
+    for (i = 0; i < 7; i++) {
+        if (strcmp(str, keywords[i]) == 0) {
+            return 1;
+        }
+    }
+    return 0;
+}
+int is_operator(char c) {
+    int i;
+    for (i = 0; i < 8; i++) {
+        if (c == operators[i][0]) {
+            return 1;
+        }
+    }
+    return 0;
+}
+int is_op(char *str) {
+    int i;
+    for (i = 0; i < 8; i++) {
+        if (strcmp(str, operators[i]) == 0) {
+            return 1;
+        }
+    }
+    return 0;
+}
+int main() {
+    char input[MAX_LENGTH];
+    int i = 0, j = 0, token_type = 0, keyword = 0, operator = 0, identifier = 0, literal = 0;
+    printf("Enter the input string: ");
+    scanf("%[^\n]", input);
+    while (input[i] != '\0') {
+        if (isspace(input[i])) {
+            i++;
+            continue;
+        }
+
+        if (is_operator(input[i])) {
+            char op[2];
+            op[0] = input[i];
+            op[1] = '\0';
+            printf("%s\t\t\t\tOperator\n", op);
+            i++;
+            continue;
+        }
+
+        if (isalpha(input[i])) {
+            char id[MAX_LENGTH];
+            j = 0;
+            while (isalnum(input[i])) {
+                id[j++] = input[i++];
+            }
+            id[j] = '\0';
+            keyword = is_keyword(id);
+            if (keyword) {
+                printf("%s\t\t\t\tKeyword\n", id);
+            } else {
+                printf("%s\t\t\t\tIdentifier\n", id);
+            }
+            continue;
+        }
+
+        if (isdigit(input[i])) {
+            char num[MAX_LENGTH];
+            j = 0;
+            while (isdigit(input[i])) {
+                num[j++] = input[i++];
+            }
+            num[j] = '\0';
+            printf("%s\t\t\t\tLiteral\n", num);
+            continue;
+        }
+
+        printf("%c\t\t\t\tInvalid\n", input[i]);
+        i++;
+    }
+    return 0;
+}
